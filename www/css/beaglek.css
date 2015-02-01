@@ -1,0 +1,37 @@
+body {
+    background-color: #000000;
+    cursor: none;
+}
+
+p {
+    margin-bottom: 0;
+    color: #cccccc;
+}
+
+.night {
+    color: #7a1818;
+}
+
+div.svgcontainer {
+    display: inline-block;
+}
+
+p.title {
+    font-size: 16px;
+    line-height: 1;
+}
+
+p.value {
+    font-size: 46px;
+    line-height: 1;
+    margin-bottom: 5px;
+}
+
+div.col-xs-6 {
+    padding-left: 0;
+}
+
+svg * {
+    vector-effect: non-scaling-stroke;
+    font-family: sans-serif;
+}
