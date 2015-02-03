@@ -1,6 +1,7 @@
 body {
     background-color: #000000;
     cursor: none;
+    height: 100%;
 }
 
 p {
@@ -34,4 +35,8 @@ div.col-xs-6 {
 svg * {
     vector-effect: non-scaling-stroke;
     font-family: sans-serif;
+}
+
+.yacht-position {
+    background-image: url("../images/yacht-position.svg");
 }
