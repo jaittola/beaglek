@@ -111,8 +111,13 @@
         rotatePositionIndicator(cog);
     }
 
+    function handleSpeedUpdate(selector, update) {
+        set("#" + selector, update.value * 2.0);  // Convert to m/s to kn.
+    }
+
     var dataDestinations = {
-        "navigation.speedOverGround": { selectors: [ "speed", "sog" ] },
+        "navigation.speedOverGround": { handler: R.lPartial(handleSpeedUpdate, "sog") },
+        "navigation.speedThroughWater": { handler: R.lPartial(handleSpeedUpdate, "speed") },
         "environment.depth": { selectors: [ "depth" ],
                                valueContainer: "value.belowTransducer.value" },
         "navigation.courseOverGroundTrue": { handler: handleCogUpdate },
