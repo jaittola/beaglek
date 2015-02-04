@@ -173,9 +173,8 @@
     }
 
     function rotatePositionIndicator(direction) {
-        // Does not work; it's not possible to rotate a divicon.
-//        $(".yacht-position").css("transform", "rotate(" + direction + "deg)");
-//        $(".yacht-position").css("transform-origin", "center");
+        $(".yacht-position-indicator").css("transform", "rotate(" + direction + "deg)");
+        $(".yacht-position-indicator").css("transform-origin", "center");
     }
 
     function updateMapPosition() {
@@ -226,7 +225,8 @@
         }).addTo(map);
         positionMarker = L.marker(position,
                                   { icon: L.divIcon({className: "yacht-position",
-                                                     iconSize: [30, 30]}),
+                                                     iconSize: [30, 30],
+                                                     html: '<div class="yacht-position-indicator"> </div>'}),
                                     keyboard: false,
                                     opacity: 0.8,
                                   });
