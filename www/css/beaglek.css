@@ -41,7 +41,7 @@ svg * {
 }
 
 .yacht-position-indicator {
-    width: 30px;
-    height: 30px;
+    width: 20px;
+    height: 20px;
     background-image: url("../images/yacht-position.svg");
 }

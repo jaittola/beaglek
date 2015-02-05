@@ -3,17 +3,17 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   width="30"
-   height="30"
-   viewBox="0 0 30 30"
+   width="20"
+   height="20"
+   viewBox="0 0 20 20"
    id="svg2"
    version="1.1">
   <g
-     id="layer1"
-     transform="translate(0,-1022.3622)">
+     id="graph"
+     transform="translate(0,-1032.3622)">
     <path
-       style="fill:#ff0000;fill-rule:evenodd;stroke:#ff0000;stroke-width:0.90815699px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 15,1024.2259 c 0,0 -6.3301281,9.8519 -7.9587491,15.3941 -1.1186881,3.8069 -1.1228207,11.8506 -1.1228207,11.8506 l 18.1631398,0 c 0,0 -0.132669,-8.1095 -1.274607,-11.9488 C 21.175011,1034.035 15,1024.2259 15,1024.2259 Z"
+       style="fill:#000080;fill-rule:evenodd;stroke:#ff0000;stroke-width:0.60193616px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 9.9794576,1033.1555 c 0,0 -4.0244382,6.8085 -5.0599086,10.6379 -0.7112567,2.6306 -0.7150151,8.1875 -0.7150151,8.1875 l 11.5498491,0 c 0,0 -0.08553,-5.6027 -0.81157,-8.2556 -1.03759,-3.7912 -4.9633554,-10.5698 -4.9633554,-10.5698 z"
        id="boat"/>
   </g>
 </svg>

@@ -4,20 +4,19 @@
     var KEY_UP = 38;
     var KEY_RIGHT = 39;
     var KEY_DOWN = 40;
+    var KEY_RETURN = 13;
 
     var views = {
         views: [
             {
                 name: "instruments",
-                setup: null,
-                keyUp: null,
-                keyDown: null,
             },
             {
                 name: "map",
                 setup: setupMap,
                 keyUp: function() { if (map) map.zoomIn(); },
                 keyDown: function() { if (map) map.zoomOut(); },
+                keyReturn: function() { tracking = !tracking; }
             },
         ],
         currentViewIndex: 0,
@@ -35,6 +34,7 @@
     };
     var defaultZoom = 15;
     var positionMarker;
+    var tracking = true;
 
     function radians(degrees) {
         return Math.PI * degrees / 180;
@@ -184,14 +184,25 @@
 
     function updateMapPosition() {
         if (!isMapVisible()) return;
-        map.panTo(position);
+
         positionMarker.setLatLng(position);
+        if (tracking)
+            map.panTo(position);
     }
 
     function viewFunction(name) {
         var view = currentView();
         if (view[name])
             view[name]();
+    }
+
+    function returnPress() {
+        var view = currentView();
+        if (view.keyReturn) view.keyReturn();
+    }
+
+    function mapDragStart() {
+        tracking = false;
     }
 
     function filterKeyCode(keyCode, event) {
@@ -204,6 +215,7 @@
         keyDowns.filter(filterKeyCode, KEY_RIGHT).onValue(changeView, +1);
         keyDowns.filter(filterKeyCode, KEY_UP).onValue(viewFunction, 'keyUp');
         keyDowns.filter(filterKeyCode, KEY_DOWN).onValue(viewFunction, 'keyDown');
+        keyDowns.filter(filterKeyCode, KEY_RETURN).onValue(returnPress);
     }
 
     function setupMap() {
@@ -230,12 +242,14 @@
         }).addTo(map);
         positionMarker = L.marker(position,
                                   { icon: L.divIcon({className: "yacht-position",
-                                                     iconSize: [30, 30],
+                                                     iconSize: [20, 20],
                                                      html: '<div class="yacht-position-indicator"> </div>'}),
                                     keyboard: false,
                                     opacity: 0.8,
                                   });
         positionMarker.addTo(map);
+
+        map.on('dragstart', mapDragStart);
     }
 
     function setupWindowResize() {
