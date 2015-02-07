@@ -45,3 +45,23 @@ svg * {
     height: 20px;
     background-image: url("../images/yacht-position.svg");
 }
+
+.infobox-container {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    text-align: center;
+    z-index: 100;
+}
+
+.infobox {
+    display: none;
+    background-color: yellow;
+    border: 2px solid #666666;
+    border-radius: 3px;
+    padding: 0 10px;
+}
+
+.infobox-text {
+    color: #666666;
+}

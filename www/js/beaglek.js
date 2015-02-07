@@ -16,7 +16,7 @@
                 setup: setupMap,
                 keyUp: function() { if (map) map.zoomIn(); },
                 keyDown: function() { if (map) map.zoomOut(); },
-                keyReturn: function() { tracking = !tracking; }
+                keyReturn: function() { tracking.toggle(); }
             },
         ],
         currentViewIndex: 0,
@@ -34,7 +34,27 @@
     };
     var defaultZoom = 15;
     var positionMarker;
-    var tracking = true;
+
+    var tracking = function() {
+        var b = new Bacon.Bus();
+
+        var result = {
+            value: true,
+            toggle: function() {
+                result.set(!result.value);
+            },
+            set: function(enabled) {
+                result.bus.push(enabled);
+            },
+            bus: b,
+            property: b.toProperty(true),
+        };
+        result.property.onValue(function(v) {
+            result.value = v;
+        });
+
+        return result;
+    }();
 
     function radians(degrees) {
         return Math.PI * degrees / 180;
@@ -186,7 +206,7 @@
         if (!isMapVisible()) return;
 
         positionMarker.setLatLng(position);
-        if (tracking)
+        if (tracking.value)
             map.panTo(position);
     }
 
@@ -202,7 +222,7 @@
     }
 
     function mapDragStart() {
-        tracking = false;
+        tracking.set(false);
     }
 
     function filterKeyCode(keyCode, event) {
@@ -250,6 +270,19 @@
         positionMarker.addTo(map);
 
         map.on('dragstart', mapDragStart);
+
+        tracking.property.onValue(setInfoboxVisibility);
+    }
+
+    function setInfoboxVisibility(trackingEnabled) {
+        if (trackingEnabled) {
+            $('#tracking-infobox').css('display', 'none');
+        }
+        else {
+            $('#tracking-infobox').css('display', 'inline-block');
+            $('#tracking-infobox .infobox-text')
+                .text("Press enter to resume tracking");
+        }
     }
 
     function setupWindowResize() {
