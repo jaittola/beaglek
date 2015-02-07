@@ -37,6 +37,10 @@ svg * {
     font-family: sans-serif;
 }
 
+.leaflet-container {
+    cursor: none;
+}
+
 .yacht-position {
 }
 
