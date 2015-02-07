@@ -15,105 +15,92 @@
     <!-- Fonts -->
 
     <!-- Style sheets -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="leaflet-0.7.3/leaflet.css" rel="stylesheet">
     <link href="css/beaglek.css" rel="stylesheet">
 
     <title>Beaglek</title>
   </head>
   <body>
-    <div class="container-fluid" id="instruments">
+    <div id="instruments">
+      <div class="flexcolumn w50" id="column1">
+        <svg
+           xmlns="http://www.w3.org/2000/svg"
+           version="1.0"
+           viewBox="0 0 800 800"
+           preserveAspectRatio="xMinYMin"
+           id="windrose"
+           class="s1">
+
+          <!-- background circle -->
+          <g id="rose" class="rose">
+            <circle cx="400" cy="400" r="380" fill="#222222" stroke-width="2px" />
+          </g>
+
+          <!-- AWA indicator sector -->
+          <g id="awa-marker">
+            <!-- updateWindSector() updates the path. -->
+            <path id="awa-indicator" d="M 400 400 v -360 a 360 360 0 0 1 0 0" fill="#aaaaaa" stroke="none" />
+          </g>
+
+          <!-- TWA indicator. -->
+          <g id="twa-marker" transform="rotate(0 400 400)" class="truewind">
+            <path d="M 390,400 l 10,-380 10,380 z" style="fill:#FFFFFF;stroke:#FFFFFF;stroke-width:1" />
+          </g>
+
+
+          <g id="boat"
+             transform="rotate(90 100 100) translate(150 -450) scale(2.5)">
+            <path
+               style="stroke:#00ff00;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+               d="m 0,100 c 150,-100 200,-35 200,-35 0,35 0,35 0,35"
+               id="path2988"
+               class="boat"/>
+            <path
+               style="stroke:#dd0000;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+               d="m 200,100 c 0,35 0,35 0,35  0,0 -70,65 -200,-35"
+               id="path2989"
+               class="boat"/>
+          </g>
+        </svg>
+      </div>
+
+      <div class="flexcolumn w25" id="column2">
         <div class="row">
-          <div class="col-xs-6 svgcontainer">
-            <svg
-               xmlns="http://www.w3.org/2000/svg"
-               version="1.0"
-               viewBox="0 0 800 800"
-               preserveAspectRatio="xMinYMin"
-               id="windrose"
-               class="s1">
-
-              <!-- background circle -->
-              <g id="rose" class="rose">
-                <circle cx="400" cy="400" r="380" fill="#222222" stroke-width="2px" />
-              </g>
-
-              <!-- AWA indicator sector -->
-              <g id="awa-marker">
-                <!-- updateWindSector() updates the path. -->
-                <path id="awa-indicator" d="M 400 400 v -360 a 360 360 0 0 1 0 0" fill="#aaaaaa" stroke="none" />
-              </g>
-
-              <!-- TWA indicator. -->
-              <g id="twa-marker" transform="rotate(0 400 400)" class="truewind">
-                <path d="M 390,400 l 10,-380 10,380 z" style="fill:#FFFFFF;stroke:#FFFFFF;stroke-width:1" />
-              </g>
-
-
-              <g id="boat"
-                 transform="rotate(90 100 100) translate(150 -450) scale(2.5)">
-                <path
-                   style="stroke:#00ff00;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-                   d="m 0,100 c 150,-100 200,-35 200,-35 0,35 0,35 0,35"
-                   id="path2988"
-                   class="boat"/>
-                <path
-                   style="stroke:#dd0000;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-                   d="m 200,100 c 0,35 0,35 0,35  0,0 -70,65 -200,-35"
-                   id="path2989"
-                   class="boat"/>
-              </g>
-            </svg>
-
-          </div>
-
-          <div class="col-xs-6">
-            <div class="row">
-              <div class="col-xs-6">
-                <p class="title">Speed kn</p>
-                <p class="value" id="speed">&nbsp;</p>
-              </div>
-              <div class="col-xs-6">
-                <p class="title">Depth m</p>
-                <p class="value" id="depth">&nbsp;</p>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-xs-6">
-                <p class="title">AWA °</p>
-                <p class="value" id="awa">&nbsp;</p>
-              </div>
-              <div class="col-xs-6">
-                <p class="title">AWS m/s</p>
-                <p class="value" id="aws">&nbsp;</p>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-xs-6">
-                <p class="title">TWA °</p>
-                <p class="value" id="twa">&nbsp;</p>
-              </div>
-              <div class="col-xs-6">
-                <p class="title">TWS m/s</p>
-                <p class="value" id="tws">&nbsp;</p>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-xs-6">
-                <p class="title">COG °</p>
-                <p class="value" id="cog">&nbsp;</p>
-              </div>
-              <div class="col-xs-6">
-                <p class="title">SOG kn</p>
-                <p class="value" id="sog">&nbsp;</p>
-              </div>
-            </div>
-
-          </div>
+          <p class="title">Speed kn</p>
+          <p class="value" id="speed">&nbsp;</p>
         </div>
+        <div class="row">
+          <p class="title">AWA °</p>
+          <p class="value" id="awa">&nbsp;</p>
+        </div>
+        <div class="row">
+          <p class="title">TWA °</p>
+          <p class="value" id="twa">&nbsp;</p>
+        </div>
+        <div class="row">
+          <p class="title">COG °</p>
+          <p class="value" id="cog">&nbsp;</p>
+        </div>
+      </div>
+
+      <div class="flexcolumn w25" id="column3">
+        <div class="row">
+          <p class="title">Depth m</p>
+          <p class="value" id="depth">&nbsp;</p>
+        </div>
+        <div class="row">
+          <p class="title">AWS m/s</p>
+          <p class="value" id="aws">&nbsp;</p>
+        </div>
+        <div class="row">
+          <p class="title">TWS m/s</p>
+          <p class="value" id="tws">&nbsp;</p>
+        </div>
+        <div class="row">
+          <p class="title">SOG kn</p>
+          <p class="value" id="sog">&nbsp;</p>
+        </div>
+      </div>
     </div>
 
     <div id="mapContainer">
@@ -128,7 +115,6 @@
 
     <script type="text/javascript" src="js/vendor/jquery-1.10.2.min.js"></script>
     <script type="text/javascript" src="js/vendor/ramda.0.9.1.min.js"></script>
-    <script type="text/javascript" src="js/vendor/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/vendor/Bacon.min.js"></script>
     <script type="text/javascript" src="leaflet-0.7.3/leaflet.js"></script>
     <script type="text/javascript" src="/signalk/stream/primus.js"></script>

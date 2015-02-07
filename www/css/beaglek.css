@@ -2,11 +2,33 @@ body {
     background-color: #000000;
     cursor: none;
     height: 100%;
+    margin: 0;
 }
 
 p {
-    margin-bottom: 0;
+    margin: 0;
     color: #cccccc;
+    font-family: arial, sans-serif;
+    line-height: 1;
+}
+
+.flexcolumn {
+    display: flex;
+    flex-direction: column;
+    float: left;
+    margin-top: 8px;
+}
+
+.w50 {
+    width: 50%;
+}
+
+.w25 {
+    width: 25%;
+}
+
+.row {
+    width: 100%;
 }
 
 .night {
@@ -19,17 +41,11 @@ div.svgcontainer {
 
 p.title {
     font-size: 16px;
-    line-height: 1;
 }
 
 p.value {
     font-size: 46px;
-    line-height: 1;
-    margin-bottom: 5px;
-}
-
-div.col-xs-6 {
-    padding-left: 0;
+    margin-bottom: 3px;
 }
 
 svg * {
@@ -39,9 +55,6 @@ svg * {
 
 .leaflet-container {
     cursor: none;
-}
-
-.yacht-position {
 }
 
 .yacht-position-indicator {
