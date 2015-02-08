@@ -31,9 +31,12 @@
         lat: 60.15,
         lon: 24.97,
         time: "",
+        courseOverGround: 0,
     };
     var defaultZoom = 15;
     var positionMarker;
+    var directionMarker;
+    var directionMarkerLength = 0;
 
     var tracking = function() {
         var b = new Bacon.Bus();
@@ -123,12 +126,35 @@
         position.lon = R.path('value.longitude', update) || position.lon;
         position.time = R.path('value.timestamp', update) || position.time;
         updateMapPosition();
+        updateDirectionMarker();
     }
 
     function handleCogUpdate(update) {
         var cog = Math.floor(update.value);
         set('#cog', cog);
+        position.courseOverGround = cog;
         rotatePositionIndicator(cog);
+        updateDirectionMarker();
+    }
+
+    function updateDirectionMarker() {
+        if (!isMapVisible()) return;
+
+        var cog = radians(position.courseOverGround);
+        var positionCoords = positionMarker.getLatLng();
+
+        var p = map.latLngToContainerPoint(positionCoords);
+        var endPoint = new L.Point(p.x + directionMarkerLength * Math.sin(cog),
+                                   p.y - directionMarkerLength * Math.cos(cog));
+        var endCoords = map.containerPointToLatLng(endPoint);
+
+        if (directionMarker) map.removeLayer(directionMarker);
+        directionMarker = L.polyline([positionCoords,
+                                      endCoords],
+                                     { color: '#000080',
+                                       weight: 2,
+                                       fillOpacity: 0.8 });
+        map.addLayer(directionMarker);
     }
 
     function handleSpeedUpdate(selector, update) {
@@ -191,6 +217,10 @@
     function zoomOut() {
         if (!map) return;
         map.zoomOut();
+    }
+
+    function mapSizeChange() {
+        directionMarkerLength = map.getSize().x / 2.5;
     }
 
     function isMapVisible() {
@@ -270,6 +300,9 @@
         positionMarker.addTo(map);
 
         map.on('dragstart', mapDragStart);
+        map.on('resize', mapSizeChange);
+
+        mapSizeChange();
 
         tracking.property.onValue(setInfoboxVisibility);
     }
