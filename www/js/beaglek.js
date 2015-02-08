@@ -75,7 +75,7 @@
     }
 
     function updateWindSector(enclosingSelector, sectorSelector, angle) {
-        var angleRadians = radians(halfAngle(angle));
+        var angleRadians = radians(Math.abs(angle));
         var resultX = Math.floor(graphCircleRadius * Math.sin(angleRadians));
         var resultY = Math.floor(graphCircleRadius *
                                  (1 - Math.cos(angleRadians)));
@@ -84,7 +84,7 @@
                            "a", graphCircleRadius,  graphCircleRadius,
                            0, 0, 1,
                            resultX, resultY ];
-        var transformation = angle > 180 ?
+        var transformation = angle < 0 ?
             "translate(" + (2 * graphCenterX) + ", 0) scale(-1,1)" :
             "";
 
@@ -97,21 +97,21 @@
     }
 
     function handleWindUpdate(windData) {
-        var awa = R.path('value.directionApparent', windData);
+        var awa = R.path('value.angleApparent', windData);
         var aws = R.path('value.speedApparent', windData);
-        var twa = R.path('value.directionTrue', windData);
+        var twa = R.path('value.angleTrue', windData);
         var tws = R.path('value.speedTrue', windData);
 
         if (awa) {
             updateWindSector("awa-marker", "awa-indicator", awa.value);
-            set("#awa", Math.floor(halfAngle(awa.value)));
+            set("#awa", Math.floor(Math.abs(awa.value)));
         }
         if (aws) {
             set("#aws", aws.value);
         }
         if (twa) {
             rotateSvgElement("twa-marker", twa.value);
-            set("#twa", Math.floor(halfAngle(twa.value)));
+            set("#twa", Math.floor(Math.abs(twa.value)));
         }
         if (tws) {
             set("#tws", tws.value);
