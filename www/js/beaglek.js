@@ -33,10 +33,12 @@
         time: "",
         courseOverGround: 0,
     };
+    var wind;
     var defaultZoom = 15;
     var positionMarker;
     var directionMarker;
     var directionMarkerLength = 0;
+    var windMarkers;
 
     var tracking = function() {
         var b = new Bacon.Bus();
@@ -63,12 +65,7 @@
         return Math.PI * degrees / 180;
     }
 
-    function halfAngle(angle) {
-        return (angle > 180 ? 360 - angle : angle);
-    }
-
     function rotateSvgElement(selector, amount) {
-
         if (!selector)
             return;
 
@@ -105,19 +102,27 @@
         var twa = R.path('value.angleTrue', windData);
         var tws = R.path('value.speedTrue', windData);
 
+        if (!wind) {
+            wind = {};
+        }
+
         if (awa) {
             updateWindSector("awa-marker", "awa-indicator", awa.value);
             set("#awa", Math.floor(Math.abs(awa.value)));
+            wind.awa = awa.value;
         }
         if (aws) {
             set("#aws", aws.value);
+            wind.aws = aws.value;
         }
         if (twa) {
             rotateSvgElement("twa-marker", twa.value);
             set("#twa", Math.floor(Math.abs(twa.value)));
+            wind.twa = twa.value;
         }
         if (tws) {
             set("#tws", tws.value);
+            wind.tws = tws.value;
         }
     }
 
@@ -126,7 +131,7 @@
         position.lon = R.path('value.longitude', update) || position.lon;
         position.time = R.path('value.timestamp', update) || position.time;
         updateMapPosition();
-        updateDirectionMarker();
+        updateDirectionMarkers();
     }
 
     function handleCogUpdate(update) {
@@ -134,27 +139,88 @@
         set('#cog', cog);
         position.courseOverGround = cog;
         rotatePositionIndicator(cog);
-        updateDirectionMarker();
+        updateDirectionMarkers();
     }
 
-    function updateDirectionMarker() {
+    function updateDirectionMarkers() {
         if (!isMapVisible()) return;
 
-        var cog = radians(position.courseOverGround);
         var positionCoords = positionMarker.getLatLng();
+        var positionPoint = map.latLngToContainerPoint(positionCoords);
 
-        var p = map.latLngToContainerPoint(positionCoords);
-        var endPoint = new L.Point(p.x + directionMarkerLength * Math.sin(cog),
-                                   p.y - directionMarkerLength * Math.cos(cog));
+        updateCourseMarker(positionPoint, positionCoords);
+        updateWindMarkers(positionPoint, positionCoords);
+    }
+
+    function updateCourseMarker(positionPoint, positionCoords) {
+        if (directionMarker) map.removeLayer(directionMarker);
+        directionMarker = drawDirectionMarker(position.courseOverGround,
+                                              positionPoint,
+                                              positionCoords,
+                                              '#000080');
+    }
+
+    function updateWindMarkers(positionPoint, positionCoords) {
+        if (windMarkers) {
+            windMarkers.forEach(function(w) { map.removeLayer(w); });
+            windMarkers = null;
+        }
+        if (!wind || !wind.awa || !wind.twa || !wind.tws || wind.tws < 2 ||
+            wind.awa > 40) return;
+        var awa = Math.abs(wind.awa);
+        var twa = Math.abs(wind.twa);
+        var wdiff = twa - awa;
+        var tack = wind.awa < 0 ? -1 : +1; // -1: left, +1, right.
+        var twd = position.courseOverGround + tack * twa;
+        var optimalTrueWindAngle = wdiff + optimalAngle(wind.aws);
+        var bestCourseCurrentTack =
+            normalizeAngle(twd + (-1) * tack * optimalTrueWindAngle);
+        var bestCourseOtherTack =
+            normalizeAngle(twd + tack * optimalTrueWindAngle);
+
+        windMarkers = [
+            drawDirectionMarker(bestCourseCurrentTack,
+                                positionPoint, positionCoords,
+                                windMarkerColor(tack)),
+            drawDirectionMarker(bestCourseOtherTack,
+                                positionPoint, positionCoords,
+                                windMarkerColor(-1 * tack))
+        ];
+    }
+
+    function drawDirectionMarker(direction,
+                                 positionPoint,
+                                 positionCoords,
+                                 color) {
+        var dirRad = radians(direction);
+        var endPoint = new L.Point(positionPoint.x +
+                                   directionMarkerLength * Math.sin(dirRad),
+                                   positionPoint.y -
+                                   directionMarkerLength * Math.cos(dirRad));
         var endCoords = map.containerPointToLatLng(endPoint);
 
-        if (directionMarker) map.removeLayer(directionMarker);
-        directionMarker = L.polyline([positionCoords,
-                                      endCoords],
-                                     { color: '#000080',
-                                       weight: 2,
-                                       fillOpacity: 0.8 });
-        map.addLayer(directionMarker);
+        var marker = L.polyline([positionCoords,
+                                 endCoords],
+                                { color: color,
+                                  weight: 2,
+                                  fillOpacity: 0.8 });
+        map.addLayer(marker);
+        return marker;
+    }
+
+    function windMarkerColor(tack) {
+        return tack < 0 ? '#00ff00' : '#ff0000';
+    }
+
+    function normalizeAngle(angle) {
+        if (angle < 0) {
+            return 360 + angle;
+        }
+        return angle % 360;
+    }
+
+    function optimalAngle(aws) {
+        return 30;
     }
 
     function handleSpeedUpdate(selector, update) {
@@ -220,7 +286,7 @@
     }
 
     function mapSizeChange() {
-        directionMarkerLength = map.getSize().x / 2.5;
+        directionMarkerLength = map.getSize().x / 1.5;
     }
 
     function isMapVisible() {
