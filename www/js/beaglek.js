@@ -34,6 +34,7 @@
         courseOverGround: 0,
     };
     var wind;
+    var waterSpeed;
     var defaultZoom = 15;
     var positionMarker;
     var directionMarker;
@@ -160,15 +161,24 @@
                                               '#000080');
     }
 
+    function courseDifference(course1, course2) {
+        var c1 = course1 >= 0 ? course1 : course1 + 360;
+        var c2 = course2 >= 0 ? course2 : course2 + 360;
+        return Math.abs(c1 - c2);
+    }
+
     function updateWindMarkers(positionPoint, positionCoords) {
         if (windMarkers) {
             windMarkers.forEach(function(w) { map.removeLayer(w); });
             windMarkers = null;
         }
-        if (!wind || !wind.awa || !wind.twa || !wind.tws || wind.tws < 2 ||
-            wind.awa > 40) return;
+        if (!wind || !wind.awa || !wind.twa || !wind.tws ||
+           wind.tws < 2 || speed > wind.tws) return;
+
         var awa = Math.abs(wind.awa);
         var twa = Math.abs(wind.twa);
+        if (awa > 40 || awa < 20) return;
+
         var wdiff = twa - awa;
         var tack = wind.awa < 0 ? -1 : +1; // -1: left, +1, right.
         var twd = position.courseOverGround + tack * twa;
@@ -177,6 +187,8 @@
             normalizeAngle(twd + (-1) * tack * optimalTrueWindAngle);
         var bestCourseOtherTack =
             normalizeAngle(twd + tack * optimalTrueWindAngle);
+        if (courseDifference(bestCourseCurrentTack,
+                             bestCourseOtherTack) > 120) return;
 
         windMarkers = [
             drawDirectionMarker(bestCourseCurrentTack,
@@ -223,13 +235,22 @@
         return 30;
     }
 
-    function handleSpeedUpdate(selector, update) {
-        set("#" + selector, update.value * 2.0);  // Convert to m/s to kn.
+    function handleSpeedUpdate(selector, value) {
+        set("#" + selector, value * 2.0);  // Convert to m/s to kn.
+    }
+
+    function handleSogUpdate(update) {
+        handleSpeedUpdate("sog", update.value);
+    }
+
+    function handleWaterSpeedUpdate(update) {
+        waterSpeed = update.value;
+        handleSpeedUpdate("speed", update.value);
     }
 
     var dataDestinations = {
-        "navigation.speedOverGround": { handler: R.lPartial(handleSpeedUpdate, "sog") },
-        "navigation.speedThroughWater": { handler: R.lPartial(handleSpeedUpdate, "speed") },
+        "navigation.speedOverGround": { handler: handleSogUpdate },
+        "navigation.speedThroughWater": { handler: handleWaterSpeedUpdate },
         "environment.depth": { selectors: [ "depth" ],
                                valueContainer: "value.belowTransducer.value" },
         "navigation.courseOverGroundTrue": { handler: handleCogUpdate },
