@@ -1,5 +1,14 @@
 (function() {
 
+    var $ = require('jquery');
+    var L = require('leaflet');
+    var Bacon = require('baconjs');
+    var R = require('ramda');
+
+    // Browserify support hacks.
+    $.fn.asEventStream = Bacon.$.asEventStream;
+    L.Icon.Default.imagePath = 'images/leaflet-images';
+
     var KEY_LEFT = 37;
     var KEY_UP = 38;
     var KEY_RIGHT = 39;

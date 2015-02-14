@@ -1,0 +1,33 @@
+{
+  "name": "beaglek",
+  "version": "0.0.1",
+  "description": "A simple UI for SignalK (http://signalk.org/)",
+  "main": "www/index.html",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jaittola/beaglek.git"
+  },
+  "keywords": [
+    "signalk",
+    "nmea",
+    "gps",
+    "sailing",
+    "boat",
+    "marine"
+  ],
+  "author": "Jukka Aittola",
+  "license": "ISC",
+  "homepage": "https://github.com/jaittola/beaglek",
+  "dependencies": {
+    "baconjs": "^0.7.48",
+    "ramda": "^0.9.1",
+    "jquery": "^1.10.2",
+    "leaflet": "^0.7.3"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-browserify": "^3.3.0",
+    "grunt-cli": "^0.1.13",
+    "grunt-contrib-watch": "^0.6.1"
+  }
+}
