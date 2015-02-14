@@ -48,9 +48,24 @@ p.value {
     margin-bottom: 3px;
 }
 
+.long-value {
+    font-size: 23px;
+    margin-bottom: 3px;
+}
+
+#coordinates {
+    margin-left: 8px;
+    display: none;
+}
+
 svg * {
     vector-effect: non-scaling-stroke;
     font-family: sans-serif;
+}
+
+.small-windrose {
+    width: 81%;
+    margin: 0 auto;
 }
 
 .leaflet-container {

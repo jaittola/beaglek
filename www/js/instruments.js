@@ -6,6 +6,32 @@ module.exports = function(opts) {
     var name = opts.name || 'instruments';
     var selector = '#' + name;
 
+    var views = {
+        currentViewIndex: 0,
+        views: [
+            {
+                name: 'default',
+                addStyles: {
+                },
+                removeStyles: {
+                    '#windrose': [ 'small-windrose' ]
+                },
+                show: [ ],
+                hide: [ '#coordinates', '#timecontainer' ],
+            },
+            {
+                name: 'coordinates',
+                addStyles: {
+                    '#windrose': [ 'small-windrose' ]
+                },
+                removeStyles: {
+                },
+                show: [ '#coordinates' ],
+                hide: [ ],
+            },
+        ],
+    }
+
     var graphCenterX = 400;
     var graphCenterY = 400;
     var graphCircleRadius = 380;
@@ -14,6 +40,39 @@ module.exports = function(opts) {
         lat: 0,
         lon: 0,
         time: "",
+    }
+
+    function setupViewVariant(view) {
+        var styleMod = function(modifier, modifications) {
+            R.mapObjIndexed(modifier, modifications);
+        };
+        var addStyles = function(styles, selector) {
+            R.forEach(function(s) {
+                var classes = $(selector).attr('class') + " " + s;
+                $(selector).attr('class', classes);
+            },
+                      styles);
+        };
+        var removeStyles = function(styles, selector) {
+            R.forEach(function(s) {
+                var classes = $(selector).attr('class').replace(s, "").trim();
+                $(selector).attr('class', classes);
+            },
+                      styles);
+        };
+
+        styleMod(addStyles, view.addStyles);
+        styleMod(removeStyles, view.removeStyles);
+        R.forEach(function(selector) { $(selector).show(); }, view.show);
+        R.forEach(function(selector) { $(selector).hide(); }, view.hide);
+    }
+
+    function viewVariant(change) {
+        var nextIdx = views.currentViewIndex + change;
+        if (nextIdx < 0) nextIdx = views.views.length - 1;
+        else if (nextIdx >= views.views.length) nextIdx = 0;
+        views.currentViewIndex = nextIdx;
+        setupViewVariant(views.views[views.currentViewIndex]);
     }
 
     function radians(degrees) {
@@ -51,6 +110,10 @@ module.exports = function(opts) {
         $(selector).html(String(value).substring(0, 4));
     }
 
+    function setL(selector, value) {
+        $(selector).html(value);
+    }
+
     function handleWindUpdate(windData) {
         var awa = R.path('value.angleApparent', windData);
         var aws = R.path('value.speedApparent', windData);
@@ -73,10 +136,22 @@ module.exports = function(opts) {
         }
     }
 
+    function formatCoordinate(numericCoordinate, latOrLong) {
+        latOrLong = latOrLong || 'lat';
+        var hemispheres = latOrLong === 'lat' ? ['N', 'S'] : ['E', 'W'];
+        var degrees = Math.floor(Math.abs(numericCoordinate));
+        var minutes = (numericCoordinate - degrees) * 60;
+        var hemisphere = numericCoordinate >= 0 ?
+            hemispheres[0] : hemispheres[1];
+        return hemisphere + " " + degrees + "°" + minutes.toFixed(3) + "'";
+    }
+
     function handlePositionUpdate(update) {
         position.lat = R.path('value.latitude', update) || position.lat;
         position.lon = R.path('value.longitude', update) || position.lon;
         position.time = R.path('value.timestamp', update) || position.time;
+        setL('#latitude', formatCoordinate(position.lat, 'lat'));
+        setL('#longitude', formatCoordinate(position.lon, 'lon'));
     }
 
     function handleCogUpdate(update) {
@@ -117,6 +192,8 @@ module.exports = function(opts) {
 
     var self = {
         name: name,
+        keyUp: function() { viewVariant(-1); },
+        keyDown: function() { viewVariant(+1); },
         updateNavigationData: updateNavigationData,
     };
 
