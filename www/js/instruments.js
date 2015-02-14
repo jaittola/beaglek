@@ -2,6 +2,7 @@ module.exports = function(opts) {
 
     var $ = require('jquery');
     var R = require('ramda');
+    var moment = require('moment');
 
     var name = opts.name || 'instruments';
     var selector = '#' + name;
@@ -27,7 +28,17 @@ module.exports = function(opts) {
                 removeStyles: {
                 },
                 show: [ '#coordinates' ],
-                hide: [ ],
+                hide: [ '#timecontainer' ],
+            },
+            {
+                name: 'time',
+                addStyles: {
+                    '#windrose': [ 'small-windrose' ]
+                },
+                removeStyles: {
+                },
+                show: [ '#timecontainer' ],
+                hide: [ '#coordinates' ],
             },
         ],
     }
@@ -48,15 +59,20 @@ module.exports = function(opts) {
         };
         var addStyles = function(styles, selector) {
             R.forEach(function(s) {
-                var classes = $(selector).attr('class') + " " + s;
-                $(selector).attr('class', classes);
+                var classes = R.pipe(R.split(" "),
+                                     R.append(s),
+                                     R.uniq)($(selector).attr('class'));
+                $(selector).attr('class', classes.join(" "));
             },
                       styles);
         };
         var removeStyles = function(styles, selector) {
             R.forEach(function(s) {
-                var classes = $(selector).attr('class').replace(s, "").trim();
-                $(selector).attr('class', classes);
+                var classes = R.pipe(R.split(" "),
+                                     R.filter(function(v) {
+                                         return v !== s;
+                                     }))($(selector).attr('class'));
+                $(selector).attr('class', classes.join(" "));
             },
                       styles);
         };
@@ -106,12 +122,12 @@ module.exports = function(opts) {
         $("#" + enclosingSelector).attr("transform", transformation);
     }
 
-    function set(selector, value) {
-        $(selector).html(String(value).substring(0, 4));
+    function setL(selector, value) {
+        if ($(selector).is(':visible')) $(selector).html(value);
     }
 
-    function setL(selector, value) {
-        $(selector).html(value);
+    function set(selector, value) {
+        setL(selector, String(value).substring(0, 4));
     }
 
     function handleWindUpdate(windData) {
@@ -146,12 +162,19 @@ module.exports = function(opts) {
         return hemisphere + " " + degrees + "°" + minutes.toFixed(3) + "'";
     }
 
+    function formatTime(timestamp) {
+        var t = moment(timestamp);
+        if (t.isValid())
+            setL("#time", t.format('D.M.YYYY H.mm.ss'));
+    }
+
     function handlePositionUpdate(update) {
         position.lat = R.path('value.latitude', update) || position.lat;
         position.lon = R.path('value.longitude', update) || position.lon;
         position.time = R.path('value.timestamp', update) || position.time;
         setL('#latitude', formatCoordinate(position.lat, 'lat'));
         setL('#longitude', formatCoordinate(position.lon, 'lon'));
+        setL('#time', formatTime(position.time));
     }
 
     function handleCogUpdate(update) {

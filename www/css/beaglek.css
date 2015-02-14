@@ -50,11 +50,15 @@ p.value {
 
 .long-value {
     font-size: 23px;
-    margin-bottom: 3px;
+    margin-top: 1px;
+    margin-bottom: 2px;
 }
 
-#coordinates {
+.left-column {
     margin-left: 8px;
+}
+
+.default-not-shown {
     display: none;
 }
 
