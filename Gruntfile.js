@@ -1,5 +1,5 @@
 module.exports = function(grunt) {
-    var sourceFiles = [ 'www/js/beaglek.js' ];
+    var sourceFiles = [ 'www/js/beaglek.js', 'www/js/map.js' ];
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         browserify: {
