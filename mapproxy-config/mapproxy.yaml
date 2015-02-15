@@ -1,0 +1,49 @@
+# MapProxy configuration for BeagleK.
+
+# Starts the following services:
+# WMS:
+#     capabilities: http://localhost:8080/service?REQUEST=GetCapabilities
+
+services:
+  wms:
+    md:
+      title: MapProxy WMS Proxy for BeagleK
+      abstract: Provdes WMS map services for BeagleK.
+
+layers:
+  - name: sea-and-land
+    title: Finnish Transport Agency's raster sea maps combined with Open Street Map.
+    sources: [ mapquest_osm_cache, liikennevirasto_wms_sea_cache ]
+
+caches:
+  liikennevirasto_wms_sea_cache:
+    grids: [webmercator]
+    sources: [liikennevirasto_wms_sea_source ]
+  mapquest_osm_cache:
+    grids: [osm_grid]
+    sources: [mapquest_osm]
+
+sources:
+  liikennevirasto_wms_sea_source:
+    type: wms
+    req:
+      url: http://kartta.liikennevirasto.fi/meriliikenne/dgds/wms_ip/merikartta?
+      layers: cells
+      # style-id-203: black ground areas (transparent), style-id-202: simple ground data
+      styles: style-id-203
+      transparent: true
+  mapquest_osm:
+    type: tile
+    grid: osm_grid
+    url: http://otile1.mqcdn.com/tiles/1.0.0/map/%(z)s/%(x)s/%(y)s.png
+
+grids:
+  webmercator:
+    base: GLOBAL_WEBMERCATOR
+  osm_grid:
+    srs: EPSG:900913
+    origin: nw
+
+globals:
+  cache:
+    base_dir: cache
