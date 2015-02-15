@@ -237,14 +237,10 @@ module.exports = function(opts) {
                     { zoomAnimation: false,
                       zoomControl: false });
         map.setView([position.lat, position.lon], defaultZoom);
-        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(map);
-        L.tileLayer.wms("http://kartta.liikennevirasto.fi/meriliikenne/dgds/wms_ip/merikartta", {
-            layers: 'cells',
-            styles: 'style-id-203',     // Ground areas are black (transparent).
-            // styles: 'style-id-202',  // 202 has simple ground data.
-            format: 'image/png',
-            transparent: true,
-        }).addTo(map);
+        // TODO, the map source should be configurable. The line below
+        // points to a local MapProxy.
+        L.tileLayer.wms('http://' + window.location.hostname + ':8001/service',
+                        { layers: 'sea-and-land' }).addTo(map);
         positionMarker = L.marker(position, {
             icon: L.divIcon({className: "yacht-position",
                              iconSize: [20, 20],

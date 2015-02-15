@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Run mapproxy from a virtualenv.
+
+MP_DIR=${MP_DIR:-~/dev-installs/mapproxy}
+MP_VENV_DIR=${MP_VENV_DIR:-~/dev-installs/virtualenvs/mapproxy}
+
+. "${MP_VENV_DIR}/bin/activate"
+cd "${MP_DIR}"
+
+exec mapproxy-util serve-develop -b 0.0.0.0:8001 mapproxy.yaml
