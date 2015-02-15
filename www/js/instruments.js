@@ -18,7 +18,7 @@ module.exports = function(opts) {
                     '#windrose': [ 'small-windrose' ]
                 },
                 show: [ ],
-                hide: [ '#coordinates', '#timecontainer' ],
+                hide: [ '#coordinates', '#timecontainer', '#vmgcontainer' ],
             },
             {
                 name: 'coordinates',
@@ -28,7 +28,7 @@ module.exports = function(opts) {
                 removeStyles: {
                 },
                 show: [ '#coordinates' ],
-                hide: [ '#timecontainer' ],
+                hide: [ '#timecontainer', '#vmgcontainer' ],
             },
             {
                 name: 'time',
@@ -38,7 +38,17 @@ module.exports = function(opts) {
                 removeStyles: {
                 },
                 show: [ '#timecontainer' ],
-                hide: [ '#coordinates' ],
+                hide: [ '#coordinates', '#vmgcontainer' ],
+            },
+            {
+                name: 'vmg',
+                addStyles: {
+                    '#windrose': [ 'small-windrose' ]
+                },
+                removeStyles: {
+                },
+                show: [ '#vmgcontainer' ],
+                hide: [ '#coordinates', '#timecontainer' ],
             },
         ],
     }
@@ -191,8 +201,11 @@ module.exports = function(opts) {
     }
 
     function handleWaterSpeedUpdate(update) {
-        waterSpeed = update.value;
         handleSpeedUpdate("speed", update.value);
+    }
+
+    function handleVmgUpdate(update) {
+        handleSpeedUpdate("vmg", Math.abs(update.value));
     }
 
     function handleDepthUpdate(update) {
@@ -203,6 +216,7 @@ module.exports = function(opts) {
         var dataDestinations = {
             "navigation.speedOverGround": handleSogUpdate,
             "navigation.speedThroughWater": handleWaterSpeedUpdate,
+            "navigation.speedParallelToWind": handleVmgUpdate,
             "environment.depth": handleDepthUpdate,
             "navigation.courseOverGroundTrue": handleCogUpdate,
             "environment.wind": handleWindUpdate,

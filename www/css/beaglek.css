@@ -19,6 +19,10 @@ p {
     margin-top: 8px;
 }
 
+.notopmargin {
+    margin-top: 0;
+}
+
 .w50 {
     width: 50%;
 }
@@ -68,7 +72,7 @@ svg * {
 }
 
 .small-windrose {
-    width: 81%;
+    width: 82%;
     margin: 0 auto;
 }
 
