@@ -235,7 +235,7 @@ module.exports = function(opts) {
 
         map = L.map(name,
                     { zoomAnimation: false,
-                      keyboard: false });
+                      zoomControl: false });
         map.setView([position.lat, position.lon], defaultZoom);
         L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(map);
         L.tileLayer.wms("http://kartta.liikennevirasto.fi/meriliikenne/dgds/wms_ip/merikartta", {
