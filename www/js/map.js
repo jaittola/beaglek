@@ -240,7 +240,7 @@ module.exports = function(opts) {
         // TODO, the map source should be configurable. The line below
         // points to a local MapProxy.
         L.tileLayer.wms('http://' + window.location.hostname + ':8001/service',
-                        { layers: 'sea-and-land' }).addTo(map);
+                        { layers: 'osm,liikennevirasto_sea' }).addTo(map);
         positionMarker = L.marker(position, {
             icon: L.divIcon({className: "yacht-position",
                              iconSize: [20, 20],

@@ -11,9 +11,12 @@ services:
       abstract: Provdes WMS map services for BeagleK.
 
 layers:
-  - name: sea-and-land
-    title: Finnish Transport Agency's raster sea maps combined with Open Street Map.
-    sources: [ mapquest_osm_cache, liikennevirasto_wms_sea_cache ]
+  - name: liikennevirasto_sea
+    title: Finnish Transport Agency's raster sea maps
+    sources: [ liikennevirasto_wms_sea_cache ]
+  - name: osm
+    title: Open Street map from MapQuest
+    sources: [ mapquest_osm_cache ]
 
 caches:
   liikennevirasto_wms_sea_cache:
