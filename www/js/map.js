@@ -235,7 +235,8 @@ module.exports = function(opts) {
 
         map = L.map(name,
                     { zoomAnimation: false,
-                      zoomControl: false });
+                      zoomControl: false,
+                      keyboard: false });
         map.setView([position.lat, position.lon], defaultZoom);
         // TODO, the map source should be configurable. The line below
         // points to a local MapProxy.
