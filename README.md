@@ -5,7 +5,7 @@ marine data server. Beaglek is intended for low-resolution
 displays like a BeagleBoard Black with a 7" display cape. The minimum
 supported resolution is 480x272.
 
-<a href="http://www.youtube.com/watch?feature=player_embedded&v=oO2OyNLKvdY" target="_blank"><img src="http://img.youtube.com/vi/oO2OyNLKvdY/0.jpg" alt="View a video of SignalK" width="640" height="480" border="10" /></a>
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=yo1xdx7KK0g" target="_blank"><img src="http://img.youtube.com/vi/yo1xdx7KK0g/0.jpg" alt="View a video of SignalK" width="640" height="480" border="10" /></a>
 
 # Deploying
 
