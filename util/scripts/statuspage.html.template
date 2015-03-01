@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<head>
+  <title>BeagleK status</title>
+  <style>
+    h1 {
+      font: 16px arial, sans-serif;
+    }
+
+    p {
+      font: 11px arial, sans-serif;
+    }
+
+    pre {
+      font-size: 9px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Loading BeagleK ...</h1>
+
+  <p>
+    WLAN configuration:
+  </p>
+  <pre>
+WLAN_INFO
+  </pre>
+
+  <p>
+    Network interfaces:
+  </p>
+
+  <pre>
+IPADDR_INFO
+  </pre>
+</body>
