@@ -1,6 +1,6 @@
 #!/bin/bash -ex
 
-BEAGLEK_URL=http://jukka-air.local:3000/sg/
+BEAGLEK_URL=${BEAGLEK_URL:-http://plaka.local:3000/sg/}
 STATUSPAGE_URL=~/statuspage/index.html
 STATUSPAGE_TEMPLATE=~/statuspage/index.html.template
 
