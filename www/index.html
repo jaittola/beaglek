@@ -63,64 +63,97 @@
           </g>
         </svg>
 
-        <div class="row left-column default-not-shown" id="coordinates">
+        <div class="row left-column default-not-shown"
+             id="coordinatecontainer">
             <p class="title">Position</p>
-            <p class="long-value" id="latitude">&nbsp;</p>
-            <p class="long-value" id="longitude">&nbsp;</p>
+            <p class="long-value latitude">&nbsp;</p>
+            <p class="long-value longitude">&nbsp;</p>
         </div>
 
-        <div class="row left-column default-not-shown" id="timecontainer">
+        <div class="row left-column default-not-shown"
+             id="timecontainer">
             <p class="title">Time</p>
-            <p class="long-value" id="time">&nbsp;</p>
+            <p class="long-value time">&nbsp;</p>
         </div>
 
         <div class="row default-not-shown" id="vmgcontainer">
-          <div class="flexcolumn w50 notopmargin" id="c1a">
+          <div class="flexcolumn w50">
             &nbsp;
           </div>
-          <div class="flexcolumn w50 notopmargin" id="c1a">
+          <div class="flexcolumn w50">
             <p class="title">VMG kn</p>
-            <p class="value" id="vmg">&nbsp;</p>
+            <p class="value vmg">&nbsp;</p>
           </div>
         </div>
       </div>
 
-      <div class="flexcolumn w25" id="column2">
+      <div class="flexcolumn w50 topmargin">
         <div class="row">
-          <p class="title">Speed kn</p>
-          <p class="value" id="speed">&nbsp;</p>
+          <div class="flexcolumn w50">
+            <p class="title">Speed kn</p>
+            <p class="value speed">&nbsp;<e/p>
+          </div>
+          <div class="flexcolumn w50">
+            <p class="title">Depth m</p>
+            <p class="value" id="depth">&nbsp;</p>
+          </div>
         </div>
-        <div class="row">
-          <p class="title">SOG kn</p>
-          <p class="value" id="sog">&nbsp;</p>
-        </div>
-        <div class="row">
-          <p class="title">AWA °</p>
-          <p class="value" id="awa">&nbsp;</p>
-        </div>
-        <div class="row">
-          <p class="title">TWA °</p>
-          <p class="value" id="twa">&nbsp;</p>
-        </div>
-      </div>
 
-      <div class="flexcolumn w25" id="column3">
         <div class="row">
-          <p class="title">Depth m</p>
-          <p class="value" id="depth">&nbsp;</p>
+          <div class="flexcolumn w50">
+            <p class="title">SOG kn</p>
+            <p class="value sog">&nbsp;</p>
+          </div>
+          <div class="flexcolumn w50">
+            <p class="title">COG °</p>
+            <p class="value" id="cog">&nbsp;</p>
+          </div>
         </div>
+
         <div class="row">
-          <p class="title">COG °</p>
-          <p class="value" id="cog">&nbsp;</p>
+          <div class="flexcolumn w50">
+            <p class="title">AWA °</p>
+            <p class="value" id="awa">&nbsp;</p>
+          </div>
+          <div class="flexcolumn w50">
+            <p class="title">AWS m/s</p>
+            <p class="value" id="aws">&nbsp;</p>
+          </div>
         </div>
+
         <div class="row">
-          <p class="title">AWS m/s</p>
-          <p class="value" id="aws">&nbsp;</p>
+          <div class="flexcolumn w50">
+            <p class="title">TWA °</p>
+            <p class="value" id="twa">&nbsp;</p>
+          </div>
+          <div class="flexcolumn w50">
+            <p class="title">TWS m/s</p>
+            <p class="value" id="tws">&nbsp;</p>
+          </div>
         </div>
-        <div class="row">
-          <p class="title">TWS m/s</p>
-          <p class="value" id="tws">&nbsp;</p>
+
+        <div class="smallscreen-not-shown row">
+          <div class="flexcolumn w50">
+            <p class="title">Time</p>
+            <p class="long-value-large time">&nbsp;</p>
+          </div>
+          <div class="flexcolumn w50">
+            <p class="title">VMG kn</p>
+            <p class="value vmg">&nbsp;</p>
+          </div>
         </div>
+
+        <div class="smallscreen-not-shown row">
+          <div class="flexcolumn w50">
+            <p class="title">Position</p>
+            <p class="long-value-large latitude">&nbsp;</p>
+          </div>
+          <div class="flexcolumn w50">
+            <p class="title">&nbsp;</p>
+            <p class="long-value-large longitude">&nbsp;</p>
+          </div>
+        </div>
+
       </div>
     </div>
 

@@ -16,11 +16,10 @@ p {
     display: flex;
     flex-direction: column;
     float: left;
-    margin-top: 8px;
 }
 
-.notopmargin {
-    margin-top: 0;
+.topmargin {
+    margin-top: 2px;
 }
 
 .w50 {
@@ -62,7 +61,7 @@ p.value {
     margin-left: 8px;
 }
 
-.default-not-shown {
+.default-not-shown, .smallscreen-not-shown {
     display: none;
 }
 
@@ -104,4 +103,39 @@ svg * {
 
 .infobox-text {
     color: #666666;
+}
+
+
+@media (min-width: 600px) {
+    p.title {
+        font-size: 22px;
+    }
+
+    p.value {
+        font-size: 64px;
+    }
+
+    p.long-value-large {
+        font-size: 24px;
+        margin-bottom: 3px;
+    }
+
+    .smallscreen-not-shown {
+        display: block;
+    }
+}
+
+@media (min-width: 1000px) {
+    p.title {
+        font-size: 30px;
+    }
+
+    p.value {
+        font-size: 80px;
+    }
+
+    p.long-value-large {
+        font-size: 40px;
+        margin-bottom: 10px;
+    }
 }

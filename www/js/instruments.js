@@ -6,6 +6,8 @@ module.exports = function(opts) {
 
     var name = opts.name || 'instruments';
     var selector = '#' + name;
+    var mediaQueryListener;
+    var isLargeVariant = false;
 
     var views = {
         currentViewIndex: 0,
@@ -18,7 +20,8 @@ module.exports = function(opts) {
                     '#windrose': [ 'small-windrose' ]
                 },
                 show: [ ],
-                hide: [ '#coordinates', '#timecontainer', '#vmgcontainer' ],
+                hide: [ '#coordinatecontainer', '#timecontainer',
+                        '#vmgcontainer' ],
             },
             {
                 name: 'coordinates',
@@ -27,7 +30,7 @@ module.exports = function(opts) {
                 },
                 removeStyles: {
                 },
-                show: [ '#coordinates' ],
+                show: [ '#coordinatecontainer' ],
                 hide: [ '#timecontainer', '#vmgcontainer' ],
             },
             {
@@ -38,7 +41,7 @@ module.exports = function(opts) {
                 removeStyles: {
                 },
                 show: [ '#timecontainer' ],
-                hide: [ '#coordinates', '#vmgcontainer' ],
+                hide: [ '#coordinatecontainer', '#vmgcontainer' ],
             },
             {
                 name: 'vmg',
@@ -48,7 +51,7 @@ module.exports = function(opts) {
                 removeStyles: {
                 },
                 show: [ '#vmgcontainer' ],
-                hide: [ '#coordinates', '#timecontainer' ],
+                hide: [ '#coordinatecontainer', '#timecontainer' ],
             },
         ],
     }
@@ -94,7 +97,9 @@ module.exports = function(opts) {
     }
 
     function viewVariant(change) {
-        var nextIdx = views.currentViewIndex + change;
+        var nextIdx =
+            (change === 0 || isLargeVariant) ?
+            0 : views.currentViewIndex + change;
         if (nextIdx < 0) nextIdx = views.views.length - 1;
         else if (nextIdx >= views.views.length) nextIdx = 0;
         views.currentViewIndex = nextIdx;
@@ -175,16 +180,16 @@ module.exports = function(opts) {
     function formatTime(timestamp) {
         var t = moment(timestamp);
         if (t.isValid())
-            setL("#time", t.format('D.M.YYYY H.mm.ss'));
+            setL(".time", t.format('D.M.YYYY H.mm.ss'));
     }
 
     function handlePositionUpdate(update) {
         position.lat = R.path('value.latitude', update) || position.lat;
         position.lon = R.path('value.longitude', update) || position.lon;
         position.time = R.path('value.timestamp', update) || position.time;
-        setL('#latitude', formatCoordinate(position.lat, 'lat'));
-        setL('#longitude', formatCoordinate(position.lon, 'lon'));
-        setL('#time', formatTime(position.time));
+        setL('.latitude', formatCoordinate(position.lat, 'lat'));
+        setL('.longitude', formatCoordinate(position.lon, 'lon'));
+        setL('.time', formatTime(position.time));
     }
 
     function handleCogUpdate(update) {
@@ -193,19 +198,19 @@ module.exports = function(opts) {
     }
 
     function handleSpeedUpdate(selector, value) {
-        set("#" + selector, value * 2.0);  // Convert to m/s to kn.
+        set(selector, value * 2.0);  // Convert to m/s to kn.
     }
 
     function handleSogUpdate(update) {
-        handleSpeedUpdate("sog", update.value);
+        handleSpeedUpdate(".sog", update.value);
     }
 
     function handleWaterSpeedUpdate(update) {
-        handleSpeedUpdate("speed", update.value);
+        handleSpeedUpdate(".speed", update.value);
     }
 
     function handleVmgUpdate(update) {
-        handleSpeedUpdate("vmg", Math.abs(update.value));
+        handleSpeedUpdate(".vmg", Math.abs(update.value));
     }
 
     function handleDepthUpdate(update) {
@@ -227,11 +232,25 @@ module.exports = function(opts) {
         if (handler) handler(update);
     }
 
+    function handleSizeVariantChange(mediaQuery) {
+        isLargeVariant = mediaQuery.matches ? true : false;
+        viewVariant(0);
+    }
+
+    function setup() {
+        if (!mediaQueryListener) {
+            mediaQueryListener = window.matchMedia("(min-width: 600px)");
+            mediaQueryListener.addListener(handleSizeVariantChange);
+        }
+        handleSizeVariantChange(mediaQueryListener);
+    }
+
     var self = {
         name: name,
         keyUp: function() { viewVariant(-1); },
         keyDown: function() { viewVariant(+1); },
         updateNavigationData: updateNavigationData,
+        setup: setup()
     };
 
     return self;
