@@ -105,6 +105,9 @@ svg * {
     color: #666666;
 }
 
+.toggle-view {
+    display: none;
+}
 
 @media (min-width: 600px) {
     p.title {
@@ -122,6 +125,27 @@ svg * {
 
     .smallscreen-not-shown {
         display: block;
+    }
+
+    .toggle-view {
+        display: inline-block;
+        position: absolute;
+        bottom: 5px;
+        left: 5px;
+        z-index: 100;
+        padding: 10px;
+        border: 1px solid #666666;
+        border-radius: 3px;
+        background-color: #000000;
+        opacity: 0.6;
+    }
+
+    .toggle-label {
+        font-size: 30px;
+    }
+
+    .infobox-text {
+        font-size: 20px;
     }
 }
 

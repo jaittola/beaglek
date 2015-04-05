@@ -25,6 +25,8 @@ module.exports = function(opts) {
     var directionMarkerLength = 0;
     var windMarkers;
 
+    var hardwareButtonNavigation = false;
+
     function radians(degrees) {
         return Math.PI * degrees / 180;
     }
@@ -206,7 +208,9 @@ module.exports = function(opts) {
         else {
             $('#tracking-infobox').css('display', 'inline-block');
             $('#tracking-infobox .infobox-text')
-                .text("Press enter to resume tracking");
+                .text(hardwareButtonNavigation ?
+                      "Press enter to resume tracking" :
+                      "Resume tracking");
         }
     }
 
@@ -234,8 +238,8 @@ module.exports = function(opts) {
         $(selector).css("width", $(window).width());
 
         map = L.map(name,
-                    { zoomAnimation: false,
-                      zoomControl: false,
+                    { zoomAnimation: hardwareButtonNavigation ? false : true,
+                      zoomControl: hardwareButtonNavigation ? false : true,
                       keyboard: false });
         map.setView([position.lat, position.lon], defaultZoom);
         // TODO, the map source should be configurable. The line below
@@ -257,6 +261,12 @@ module.exports = function(opts) {
         mapSizeChange();
 
         tracking.property.onValue(setInfoboxVisibility);
+
+        $(".infobox").click(tracking.toggle);
+    }
+
+    function sizeVariantChange(withHwButtons) {
+        hardwareButtonNavigation = withHwButtons;
     }
 
     var self = {
@@ -267,6 +277,7 @@ module.exports = function(opts) {
         keyDown: function() { if (map) map.zoomOut(); },
         keyReturn: function() { tracking.toggle(); },
         updateNavigationData: updateNavigationData,
+        sizeVariantChange: sizeVariantChange,
     };
 
     return self;

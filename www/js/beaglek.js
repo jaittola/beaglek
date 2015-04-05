@@ -56,6 +56,12 @@
         return event.keyCode === keyCode;
     }
 
+    function setupViewToggleButton() {
+        $(".toggle-view").click(function() {
+            changeView(+1);
+        });
+    }
+
     function setupKeyInput() {
         var keyDowns = $(document).asEventStream("keydown");
         keyDowns.filter(filterKeyCode, KEY_LEFT).onValue(changeView, -1);
@@ -74,6 +80,20 @@
         });
     }
 
+    function handleSizeVariantChange(mediaQueryListener) {
+        views.views.forEach(function(v) {
+            if (v.sizeVariantChange)
+                v.sizeVariantChange(!mediaQueryListener.matches);
+        });
+    }
+
+    function setupMediaQuery() {
+        var mediaQueryListener = window.matchMedia("(min-width: 600px)");
+        mediaQueryListener.addListener(handleSizeVariantChange);
+        handleSizeVariantChange(mediaQueryListener);
+    }
+
+
     function setup() {
         var primusData = Primus.connect(window.location.protocol + "://" +
                                         window.location.host +
@@ -89,8 +109,10 @@
                    R.forEach(updateNavigationData))(msg);
         });
 
+        setupViewToggleButton();
         setupKeyInput();
         setupWindowResize();
+        setupMediaQuery();
     }
 
     $(document).ready(setup);

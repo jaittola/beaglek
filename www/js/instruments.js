@@ -6,8 +6,7 @@ module.exports = function(opts) {
 
     var name = opts.name || 'instruments';
     var selector = '#' + name;
-    var mediaQueryListener;
-    var isLargeVariant = false;
+    var hardwareButtonNavigation = false;
 
     var views = {
         currentViewIndex: 0,
@@ -98,7 +97,7 @@ module.exports = function(opts) {
 
     function viewVariant(change) {
         var nextIdx =
-            (change === 0 || isLargeVariant) ?
+            (change === 0 || !hardwareButtonNavigation) ?
             0 : views.currentViewIndex + change;
         if (nextIdx < 0) nextIdx = views.views.length - 1;
         else if (nextIdx >= views.views.length) nextIdx = 0;
@@ -232,17 +231,9 @@ module.exports = function(opts) {
         if (handler) handler(update);
     }
 
-    function handleSizeVariantChange(mediaQuery) {
-        isLargeVariant = mediaQuery.matches ? true : false;
+    function sizeVariantChange(withHwButtons) {
+        hardwareButtonNavigation = withHwButtons;
         viewVariant(0);
-    }
-
-    function setup() {
-        if (!mediaQueryListener) {
-            mediaQueryListener = window.matchMedia("(min-width: 600px)");
-            mediaQueryListener.addListener(handleSizeVariantChange);
-        }
-        handleSizeVariantChange(mediaQueryListener);
     }
 
     var self = {
@@ -250,7 +241,7 @@ module.exports = function(opts) {
         keyUp: function() { viewVariant(-1); },
         keyDown: function() { viewVariant(+1); },
         updateNavigationData: updateNavigationData,
-        setup: setup()
+        sizeVariantChange: sizeVariantChange,
     };
 
     return self;
