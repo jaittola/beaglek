@@ -111,7 +111,7 @@ module.exports = function(opts) {
             windMarkers = null;
         }
         if (!wind || !wind.awa || !wind.twa || !wind.tws ||
-            wind.tws < 2 || speed > wind.tws)
+            wind.tws < 2 || waterSpeed > wind.tws)
             return;
 
         var awa = Math.abs(wind.awa);
