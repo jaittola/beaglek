@@ -11,7 +11,7 @@ module.exports = function(opts) {
     var name = opts.name || 'map';
     var selector = '#' + name;
     var map;
-    var wind;
+    var wind = {};
     var position = {
         lat: 60.15,
         lon: 24.97,
@@ -52,15 +52,23 @@ module.exports = function(opts) {
         return result;
     }();
 
-    function handleWindUpdate(windData) {
-        if (!wind) {
-            wind = {};
-        }
+    function handleAwaUpdate(update) {
+        wind.awa = update.value;
+        updateDirectionMarkers();
+    }
 
-        wind.awa = R.path('value.angleApparent.value', windData) || wind.awa;
-        wind.aws = R.path('value.speedApparent.value', windData) || wind.aws;
-        wind.twa = R.path('value.angleTrue.value', windData) || wind.twa;
-        wind.tws = R.path('value.speedTrue.value', windData) || wind.tws;
+    function handleAwsUpdate(update) {
+        wind.aws = update.value;
+        updateDirectionMarkers();
+    }
+
+    function handleTwaUpdate(update) {
+        wind.twa = update.value;
+        updateDirectionMarkers();
+    }
+
+    function handleTwsUpdate(update) {
+        wind.tws = update.value;
         updateDirectionMarkers();
     }
 
@@ -218,7 +226,10 @@ module.exports = function(opts) {
         var dataDestinations = {
             "navigation.speedThroughWater": handleWaterSpeedUpdate,
             "navigation.courseOverGroundTrue": handleCogUpdate,
-            "environment.wind": handleWindUpdate,
+            "environment.wind.speedApparent": handleAwsUpdate,
+            "environment.wind.angleApparent": handleAwaUpdate,
+            "environment.wind.speedTrue": handleTwsUpdate,
+            "environment.wind.angleTrue": handleTwaUpdate,
             "navigation.position": handlePositionUpdate,
         };
 

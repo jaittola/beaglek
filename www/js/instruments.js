@@ -144,26 +144,22 @@ module.exports = function(opts) {
         setL(selector, String(value).substring(0, 4));
     }
 
-    function handleWindUpdate(windData) {
-        var awa = R.path('value.angleApparent', windData);
-        var aws = R.path('value.speedApparent', windData);
-        var twa = R.path('value.angleTrue', windData);
-        var tws = R.path('value.speedTrue', windData);
+    function handleAwaUpdate(update) {
+        updateWindSector("awa-marker", "awa-indicator", update.value);
+        set("#awa", Math.floor(Math.abs(update.value)));
+    }
 
-        if (awa) {
-            updateWindSector("awa-marker", "awa-indicator", awa.value);
-            set("#awa", Math.floor(Math.abs(awa.value)));
-        }
-        if (aws) {
-            set("#aws", aws.value);
-        }
-        if (twa) {
-            rotateSvgElement("twa-marker", twa.value);
-            set("#twa", Math.floor(Math.abs(twa.value)));
-        }
-        if (tws) {
-            set("#tws", tws.value);
-        }
+    function handleAwsUpdate(update) {
+        set("#aws", update.value);
+    }
+
+    function handleTwaUpdate(update) {
+        rotateSvgElement("twa-marker", update.value);
+        set("#twa", Math.floor(Math.abs(update.value)));
+    }
+
+    function handleTwsUpdate(update) {
+        set("#tws", update.value);
     }
 
     function formatCoordinate(numericCoordinate, latOrLong) {
@@ -223,7 +219,10 @@ module.exports = function(opts) {
             "navigation.speedParallelToWind": handleVmgUpdate,
             "environment.depth.belowTransducer": handleDepthUpdate,
             "navigation.courseOverGroundTrue": handleCogUpdate,
-            "environment.wind": handleWindUpdate,
+            "environment.wind.speedApparent": handleAwsUpdate,
+            "environment.wind.angleApparent": handleAwaUpdate,
+            "environment.wind.speedTrue": handleTwsUpdate,
+            "environment.wind.angleTrue": handleTwaUpdate,
             "navigation.position": handlePositionUpdate,
         };
 
