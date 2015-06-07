@@ -97,7 +97,7 @@
     function setup() {
         var primusData = Primus.connect(window.location.protocol + "://" +
                                         window.location.host +
-                                        "/primus/signalk?stream=delta",
+                                        "/signalk/stream/v1?stream=delta",
                                         { reconnect: { maxDelay: 15000,
                                                        minDelay: 500,
                                                        retries: Infinity }
