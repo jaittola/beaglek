@@ -213,7 +213,7 @@ module.exports = function(opts) {
     }
 
     function handleDepthUpdate(update) {
-        set("#depth", R.path('value.belowTransducer.value', update) || "");
+        set("#depth", update.value);
     }
 
     function updateNavigationData(update) {
@@ -221,7 +221,7 @@ module.exports = function(opts) {
             "navigation.speedOverGround": handleSogUpdate,
             "navigation.speedThroughWater": handleWaterSpeedUpdate,
             "navigation.speedParallelToWind": handleVmgUpdate,
-            "environment.depth": handleDepthUpdate,
+            "environment.depth.belowTransducer": handleDepthUpdate,
             "navigation.courseOverGroundTrue": handleCogUpdate,
             "environment.wind": handleWindUpdate,
             "navigation.position": handlePositionUpdate,
