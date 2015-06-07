@@ -1,6 +1,5 @@
 body {
     background-color: #000000;
-    cursor: none;
     height: 100%;
     margin: 0;
 }
@@ -75,10 +74,6 @@ svg * {
     margin: 0 auto;
 }
 
-.leaflet-container {
-    cursor: none;
-}
-
 .yacht-position-indicator {
     width: 20px;
     height: 20px;
@@ -146,6 +141,12 @@ svg * {
 
     .infobox-text {
         font-size: 20px;
+    }
+}
+
+@media (max-width: 1000px) {
+    body, .leaflet-container {
+        cursor: none;
     }
 }
 
